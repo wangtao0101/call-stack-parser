@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="index.css">
+    <title>Call Stack Parser</title>
+  </head>
+  <body>
+    <div class="parse-contianer">
+      <button id="select-sourcemap">Select SourceMap Directory</button>
+      <div class="source-map-files">
+          <textarea readonly id="source-map-dir"></textarea>
+      </div>
+      <div class="output-input">
+        <div class="original-call-stack">
+            <div>Target Call Stack</div>
+            <textarea id="original-text"></textarea>
+        </div>
+        <div class="parsed-call-stack">
+            <div>Result Call Stack</div>
+            <textarea id="parsed-text" readonly></textarea>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button id="parse-call-stack">Parse</button>
+        <button id="empty-all">Empty</button>
+      </div>
+    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>

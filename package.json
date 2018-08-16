@@ -1,0 +1,20 @@
+{
+  "name": "call-stack-parser",
+  "version": "1.0.0",
+  "description": "An electron app for parsing call stack according source-map files.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/wangtao0101/call-stack-parser",
+  "keywords": [
+  ],
+  "author": "wangtao0101",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "source-map": "^0.7.3"
+  }
+}

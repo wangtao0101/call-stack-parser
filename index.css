@@ -1,0 +1,59 @@
+body {
+    margin: 8px;
+}
+
+textarea {
+    resize: none;
+}
+
+.parse-contianer {
+    display: flex;
+    flex-direction: column;
+}
+
+.source-map-files textarea {
+    height: 200px;
+    width: 100%
+}
+
+.output-input {
+    display: flex;
+}
+
+.output-input>div {
+    flex: 0 1 50%;
+}
+
+.original-call-stack {
+    padding-right: 5px;
+}
+
+.parsed-call-stack {
+    padding-left: 5px;
+}
+
+.output-input textarea {
+    width: 100%;
+    height: 435px;
+}
+
+#select-sourcemap {
+    width: 200px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.btn-group {
+    display: flex;
+}
+
+#parse-call-stack {
+    width: 200px;
+    margin-top: 5px;
+}
+
+#empty-all {
+    width: 200px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
