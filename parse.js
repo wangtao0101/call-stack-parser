@@ -7,7 +7,7 @@ function getFileName(filePath) {
   return pathList[pathList.length - 1];
 }
 
-module.exports = parse = async (stack, dirPath) => {
+const parse = async (stack, dirPath) => {
   const stackLines = stack.split(/\n/);
   const lines = [];
   const cacheConsumers = {};
@@ -32,13 +32,36 @@ module.exports = parse = async (stack, dirPath) => {
         line: lineN, // line: 1-based
         column: columnN - 1, // column: 0-based
       });
-      lines.push(`${position.source}:${position.line}:${position.column}`);
+      lines.push({
+        path: filePath,
+        source: position.source,
+        line: position.line,
+        column: position.column,
+        name: position.name,
+      });
     } else {
       lines.push(line);
     }
   }
   Object.keys(cacheConsumers).map(key => {
     cacheConsumers[key].destroy();
-  })
+  });
   return lines;
+};
+
+const getContent = async (filePath, sourceFile) => {
+  if (fs.existsSync(filePath)) {
+    const sourceContent = fs.readFileSync(filePath);
+    const sourceMap = JSON.parse(sourceContent.toString());
+    const consumer = await new SourceMapConsumer(sourceMap);
+    const content = consumer.sourceContentFor(sourceFile);
+    consumer.destroy();
+    return content;
+  }
+  return null;
+};
+
+module.exports = {
+  parse,
+  getContent,
 };

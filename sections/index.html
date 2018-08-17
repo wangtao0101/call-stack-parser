@@ -19,7 +19,7 @@
         </div>
         <div class="parsed-call-stack">
             <div>Result Call Stack</div>
-            <textarea id="parsed-text" readonly></textarea>
+            <div id="parsed-text" readonly></div>
         </div>
       </div>
       <div class="btn-group">
@@ -27,9 +27,9 @@
         <button id="empty-all">Empty</button>
       </div>
     </div>
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
   </body>
+  <script>
+    // You can also require other files to run in this process
+    require('../renderer/index.js')
+  </script>
 </html>

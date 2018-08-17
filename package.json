@@ -7,14 +7,14 @@
     "start": "electron ."
   },
   "repository": "https://github.com/wangtao0101/call-stack-parser",
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "wangtao0101",
   "license": "MIT",
   "devDependencies": {
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "monaco-editor": "^0.14.2",
     "source-map": "^0.7.3"
   }
 }

@@ -2,7 +2,7 @@
 const { app, BrowserWindow } = require('electron');
 const { ipcMain, dialog } = require('electron');
 const fs = require('fs');
-const parse = require('./parse.js');
+const { parse, getContent } = require('./parse.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,9 +11,10 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 1000, height: 800 });
+  mainWindow.setMenu(null);
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('./sections/index.html');
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -70,11 +71,20 @@ ipcMain.on('open-file-dialog', event => {
 ipcMain.on('parse-source-map', async (event, stack, filePath) => {
   const parsedStack = await parse(stack, filePath);
   event.sender.send('source-map-result', parsedStack);
-  const options = {
-    type: 'info',
-    message: "Parsed Success",
+  // const options = {
+  //   type: 'info',
+  //   message: "Parsed Success",
+  // }
+  // dialog.showMessageBox(options);
+});
+
+ipcMain.on('get-source-content', async (event, filePath, sourceFile, line, column, name) => {
+  const content = await getContent(filePath, sourceFile);
+  if (content != null) {
+    event.sender.send('source-content', sourceFile, content, line, column, name);
+    return;
   }
-  dialog.showMessageBox(options);
+  dialog.showErrorBox('Parse Error', filePath);
 });
 
 // In this file you can include the rest of your app's specific main process
