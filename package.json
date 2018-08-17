@@ -4,16 +4,21 @@
   "description": "An electron app for parsing call stack according source-map files.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager ./ callStackParser --out ./build --app-version 1.0.0 --overwrite",
+    "dist": "cross-env HTTPS_PROXY=http://192.168.1.203:1080 electron-builder --win --x64"
   },
   "repository": "https://github.com/wangtao0101/call-stack-parser",
   "keywords": [],
   "author": "wangtao0101",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-builder": "^20.28.1",
+    "electron-packager": "^12.1.0"
   },
   "dependencies": {
+    "cross-env": "^5.2.0",
     "monaco-editor": "^0.14.2",
     "source-map": "^0.7.3"
   }
