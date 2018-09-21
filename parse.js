@@ -67,7 +67,7 @@ const getSourcemapFiles = async(filename, basePath) => {
     const sourceContent = fs.readFileSync(filePath);
     const sourceMap = JSON.parse(sourceContent.toString());
     const filteredFiles = sourceMap.sources.filter(file => !file.includes('node_modules'));
-    return filteredFiles;
+    return filteredFiles.sort();
   }
   return [];
 }
