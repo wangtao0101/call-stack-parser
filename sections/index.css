@@ -11,9 +11,15 @@ textarea {
     flex-direction: column;
 }
 
-.source-map-files textarea {
+.source-map-files div {
     height: 200px;
-    width: 100%
+    width: 100%;
+    overflow: auto;
+    border: solid 1px #A9A9A9;
+}
+
+.source-map-files a {
+    cursor: pointer;
 }
 
 .output-input {

@@ -61,7 +61,19 @@ const getContent = async (filePath, sourceFile) => {
   return null;
 };
 
+const getSourcemapFiles = async(filename, basePath) => {
+  const filePath = path.join(basePath, filename);
+  if (fs.existsSync(filePath)) {
+    const sourceContent = fs.readFileSync(filePath);
+    const sourceMap = JSON.parse(sourceContent.toString());
+    const filteredFiles = sourceMap.sources.filter(file => !file.includes('node_modules'));
+    return filteredFiles;
+  }
+  return [];
+}
+
 module.exports = {
   parse,
   getContent,
+  getSourcemapFiles,
 };

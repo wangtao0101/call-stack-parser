@@ -2,7 +2,8 @@
 const { app, BrowserWindow } = require('electron');
 const { ipcMain, dialog } = require('electron');
 const fs = require('fs');
-const { parse, getContent } = require('./parse.js');
+const { parse, getContent, getSourcemapFiles } = require('./parse.js');
+const path = require('path');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -81,11 +82,62 @@ ipcMain.on('parse-source-map', async (event, stack, filePath) => {
 ipcMain.on('get-source-content', async (event, filePath, sourceFile, line, column, name) => {
   const content = await getContent(filePath, sourceFile);
   if (content != null) {
-    event.sender.send('source-content', sourceFile, content, line, column, name);
+    showSource(sourceFile, content, line, column, name);
     return;
   }
   dialog.showErrorBox('Parse Error', filePath);
 });
+
+ipcMain.on('get-source-file-list', async (event, filename, basePath) => {
+  const files = await getSourcemapFiles(filename, basePath);
+  if (files.length !== 0) {
+    let win = new BrowserWindow({ width: 800, height: 800 });
+    win.setMenu(null);
+
+    win.on('close', () => {
+      win = null;
+    });
+    let url = require('url').format({
+      protocol: 'file',
+      slashes: true,
+      pathname: require('path').join(__dirname, './sections/filelist.html'),
+    });
+    win.loadURL(url);
+    win.webContents.on('dom-ready', () => {
+      win.webContents.send('file-data', {
+        filename,
+        filePath: path.join(basePath, filename),
+        files,
+      })
+    });
+    win.show();
+  }
+});
+
+function showSource(sourceFile, content, line, column, name) {
+  let win = new BrowserWindow({ width: 800, height: 800 });
+  // win.setMenu(null);
+
+  win.on('close', () => {
+    win = null;
+  });
+  let url = require('url').format({
+    protocol: 'file',
+    slashes: true,
+    pathname: require('path').join(__dirname, './sections/code.html'),
+  });
+  win.loadURL(url);
+  win.webContents.on('dom-ready', () => {
+    win.webContents.send('file-data', {
+      sourceFile,
+      content,
+      line,
+      column,
+      name,
+    })
+  });
+  win.show();
+}
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

@@ -33,8 +33,28 @@ parseBtn.addEventListener('click', event => {
 
 ipcRenderer.on('selected-directory', (event, path, files) => {
   if (files != null) {
-    document.getElementById('source-map-dir').innerHTML = `${files.join('\n')}`;
+    let html = '';
+    files.map(file => {
+      if (file.endsWith('js.map')) {
+        html += `<a href="#" class="filename" data-path="${file}">${file}</a></br>`
+      } else {
+        html += `<span>${file}</span></br>`
+      }
+    });
+    document.getElementById('source-map-dir').innerHTML = html;
     selectedPath = path;
+
+    const aEL = document.querySelectorAll('.filename');
+    aEL.forEach(function(item) {
+      item.addEventListener('click', function() {
+        const filename = item.dataset.path;
+        ipcRenderer.send(
+          'get-source-file-list',
+          filename,
+          selectedPath,
+        );
+      });
+    });
   }
 });
 
@@ -68,29 +88,4 @@ ipcRenderer.on('source-map-result', (event, stacks) => {
       });
     });
   }
-});
-
-ipcRenderer.on('source-content', (event, sourceFile, content, line, column, name) => {
-  let win = new BrowserWindow({ width: 800, height: 800 });
-  win.setMenu(null);
-
-  win.on('close', () => {
-    win = null;
-  });
-  let url = require('url').format({
-    protocol: 'file',
-    slashes: true,
-    pathname: require('path').join(__dirname, '../sections/code.html'),
-  });
-  win.loadURL(url);
-  win.webContents.on('dom-ready', () => {
-    win.webContents.send('file-data', {
-      sourceFile,
-      content,
-      line,
-      column,
-      name,
-    })
-  });
-  win.show();
 });
