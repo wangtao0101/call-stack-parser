@@ -1,6 +1,6 @@
 {
   "name": "call-stack-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An electron app for parsing call stack according source-map files.",
   "main": "main.js",
   "scripts": {
